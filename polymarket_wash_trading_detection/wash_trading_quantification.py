@@ -356,3 +356,18 @@ ax.tick_params(axis='x', labelrotation=45)
 
 plt.tight_layout()
 plt.savefig(os.path.join(os.path.dirname(__file__),"./output/plots/wash_vol_by_month.pdf"))
+
+# =================================================================================
+# Wash trading volume at time of the day
+# =================================================================================
+wash_copy = wash_trades_labeled_all.copy()
+wash_copy['datetime'] = pd.to_datetime(wash_copy['block_timestamp_unix'], unit='s', utc=True)
+wash_copy['hour'] = wash_copy['datetime'].dt.hour
+hour_counts = wash_copy['hour'].value_counts().sort_index()
+plt.figure(figsize=(10, 6))
+hour_counts.plot(kind='bar')
+plt.xlabel('Hour of the Day (UTC)')
+plt.ylabel('Number of Wash Trades')
+plt.xticks(rotation=0)
+plt.tight_layout()
+plt.savefig(os.path.join(os.path.dirname(__file__),"./output/plots/wash_trades_during_day.pdf"))
